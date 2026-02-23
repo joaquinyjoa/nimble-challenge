@@ -1,35 +1,65 @@
-import { use, useEffect } from "react";
+import useFetch from "./hooks/useFetch";
+import { getCandidateByEmail, getJobs, applyToJob } from "./services/api";
+import JobList from "./components/JobList";
 
 function App() {
+  const CORREO = "joaquinalfredogreco@gmail.com";
 
-  useEffect(() =>{
-    const fetchData = async () => {
-      try {
+  const {
+    data: candidato,
+    loading: cargandoCandidato,
+    error: errorCandidato
+  } = useFetch(() => getCandidateByEmail(CORREO));
 
-        const response = await fetch(
-        "https://botfilter-h5ddh6dye8exb7ha.centralus-01.azurewebsites.net/api/candidate/get-by-email?email=tuemail@gmail.com"
-        );
+  const {
+    data: trabajos,
+    loading: cargandoTrabajos,
+    error: errorTrabajos
+  } = useFetch(getJobs);
 
-        if(!response.ok){
-          throw new Error("Error en la solicitud: " + response.status);
-        }
+  const {
+    execute: postular,
+    loading: enviandoPostulacion
+  } = useFetch(applyToJob, false);
 
-        const data = await response.json();
-        console.log("Datos obtenidos:", data);
+  const manejarPostulacion = async (jobId, repoUrl) => {
+    if (!candidato) return;
 
-      } catch (error) {
-        console.error("Error al obtener los datos:", error);
-      }
+    try {
+      await postular({
+        uuid: candidato.uuid,
+        jobId,
+        candidateId: candidato.candidateId,
+        repoUrl,
+      });
 
-      fetchData();
-      
+      alert("¡Postulación enviada con éxito!");
+
+    } catch (error) {
+      console.error(error);
     }
-  }, [])
+  };
+
+  if (cargandoCandidato || cargandoTrabajos) {
+    return <p>Cargando...</p>;
+  }
+
+  if (errorCandidato || errorTrabajos) {
+    return <p>Ocurrió un error al cargar los datos.</p>;
+  }
 
   return (
     <div>
-      <h1>Nimble Challenge</h1>
+      <h1>Challenge Nimble Gravity</h1>
+      {trabajos && (
+        <JobList
+          jobs={trabajos}
+          onApply={manejarPostulacion}
+          applying={enviandoPostulacion}
+        />
+      )}
     </div>
   );
-  
 }
+
+export default App;
