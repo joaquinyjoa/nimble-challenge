@@ -1,16 +1,96 @@
-# React + Vite
+# Nimble Challenge
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Aplicación frontend construida con React + Vite para listar búsquedas laborales y enviar postulaciones con un repositorio de GitHub.
 
-Currently, two official plugins are available:
+## Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- React 19
+- Vite 8
+- Bootstrap 5
+- ESLint 9
 
-## React Compiler
+## Requisitos
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Node.js 18+ (recomendado 20+)
+- npm 9+
 
-## Expanding the ESLint configuration
+## Instalación
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```bash
+npm install
+```
+
+## Scripts disponibles
+
+- Desarrollo:
+
+```bash
+npm run dev
+```
+
+- Build de producción:
+
+```bash
+npm run build
+```
+
+- Vista previa de build:
+
+```bash
+npm run preview
+```
+
+- Linter:
+
+```bash
+npm run lint
+```
+
+## Flujo de la app
+
+1. Busca un candidato por email fijo (`App.jsx`).
+2. Obtiene la lista de jobs disponibles.
+3. Permite ingresar la URL de un repo por cada job.
+4. Envía la postulación al endpoint correspondiente.
+
+## Estructura principal
+
+```text
+src/
+	components/
+		JobList.jsx
+		JobItem.jsx
+	hooks/
+		useFetch.js
+	services/
+		api.js
+	App.jsx
+	App.css
+	index.css
+```
+
+## API utilizada
+
+La app consume el backend en:
+
+```text
+https://botfilter-h5ddh6dye8exb7ha.centralus-01.azurewebsites.net
+```
+
+Endpoints usados:
+
+- `GET /api/candidate/get-by-email?email=...`
+- `GET /api/jobs/get-list`
+- `POST /api/candidate/apply-to-job`
+
+## Consideraciones
+
+- El email del candidato está hardcodeado en `src/App.jsx`.
+- No se requiere `.env` en la versión actual.
+- El botón de postulación se habilita al cargar una URL de repositorio.
+
+## Mejoras posibles
+
+- Mover `BASE_URL` y el email de candidato a variables de entorno.
+- Agregar validación más estricta de URL.
+- Reemplazar `alert` por notificaciones UI no bloqueantes.
