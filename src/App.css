@@ -1,42 +1,109 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+.app-shell {
+  min-height: 100vh;
+  background: radial-gradient(circle at top, #f4f7ff 0%, #eef2ff 34%, #f8f9fc 100%);
+  padding: 16px;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.app-header {
+  margin-bottom: 1.25rem;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.app-kicker {
+  color: #4c56e0;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  font-size: 0.8rem;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.main-title {
+  font-weight: 700;
+  color: #1f2642;
+  font-size: clamp(1.6rem, 2.8vw, 2.1rem);
 }
 
-.card {
-  padding: 2em;
+.app-subtitle {
+  color: #5e6686;
+  font-size: 0.98rem;
 }
 
-.read-the-docs {
-  color: #888;
+.job-list {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.job-card {
+  border: none;
+  border-radius: 14px;
+  background: #ffffff;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 10px 30px rgba(32, 43, 85, 0.08);
+}
+
+.job-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 34px rgba(32, 43, 85, 0.14);
+}
+
+.job-label {
+  color: #5f6ab8;
+  font-size: 0.76rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.card-title {
+  color: #1f2642;
+  font-weight: 700;
+}
+
+.form-label {
+  color: #3a4368;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.form-control {
+  border-radius: 10px;
+  border: 1px solid #ced3eb;
+  min-height: 44px;
+}
+
+.form-control:focus {
+  border-color: #5f6ab8;
+  box-shadow: 0 0 0 0.2rem rgba(95, 106, 184, 0.2);
+}
+
+.btn-custom {
+  border-radius: 10px;
+  padding: 0.7rem 1rem;
+  font-weight: 600;
+  min-height: 44px;
+}
+
+.job-help {
+  color: #677193;
+  font-size: 0.82rem;
+}
+
+.app-state {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background: #f4f6ff;
+  padding: 1rem;
+}
+
+.status-card {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 10px 24px rgba(32, 43, 85, 0.1);
+  padding: 1rem 1.25rem;
+  font-weight: 600;
+  color: #2f3655;
+}
+
+.status-card--error {
+  color: #8c2f2f;
 }

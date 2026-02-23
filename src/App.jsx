@@ -1,6 +1,7 @@
 import useFetch from "./hooks/useFetch";
 import { getCandidateByEmail, getJobs, applyToJob } from "./services/api";
 import JobList from "./components/JobList";
+import "./App.css";
 
 function App() {
   const EMAIL = "joaquinalfredogreco@gmail.com";
@@ -40,20 +41,48 @@ function App() {
     }
   };
 
-  if (candidateLoading || jobsLoading) return <p>Loading...</p>;
-  if (candidateError || jobsError) return <p>Error...</p>;
+  if (candidateLoading || jobsLoading) {
+    return (
+      <div className="app-state">
+        <div className="status-card">Cargando oportunidades...</div>
+      </div>
+    );
+  }
+
+  if (candidateError || jobsError) {
+    return (
+      <div className="app-state">
+        <div className="status-card status-card--error">
+          Ocurrió un error al cargar la información.
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div>
-      <h1>Nimble Gravity Challenge</h1>
-      {jobs && (
-        <JobList
-          jobs={jobs}
-          onApply={handleApply}
-          applying={applying}
-        />
-      )}
-    </div>
+    <main className="app-shell">
+      <div className="container py-5">
+        <div className="row justify-content-center">
+          <div className="col-12 col-md-10 col-lg-8 col-xl-7">
+            <header className="app-header text-center mb-4">
+              <p className="app-kicker mb-2">Nimble Gravity</p>
+              <h1 className="main-title mb-2">Challenge de Postulaciones</h1>
+              <p className="app-subtitle mb-0">
+                Compartí tu repositorio y aplicá a las posiciones disponibles.
+              </p>
+            </header>
+
+            {jobs && (
+              <JobList
+                jobs={jobs}
+                onApply={handleApply}
+                applying={applying}
+              />
+            )}
+          </div>
+        </div>
+      </div>
+    </main>
   );
 }
 

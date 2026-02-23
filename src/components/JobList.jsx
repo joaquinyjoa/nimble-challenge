@@ -1,10 +1,10 @@
 import JobItem from "./JobItem";
 
-function JobList({ jobs, onApply }) {
+function JobList({ jobs, onApply, applying }) {
     return(
-        <div>
+        <div className="job-list">
             {jobs.map(job => (
-                <JobItem key={job.id} job={job} onApply={onApply} />
+                <JobItem key={job.id} job={job} onApply={onApply} applying={applying} />
             ))}
         </div>
     )
