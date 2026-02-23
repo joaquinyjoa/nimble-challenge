@@ -107,3 +107,8 @@
 .status-card--error {
   color: #8c2f2f;
 }
+
+.app-alert {
+  border-radius: 10px;
+  margin-bottom: 0.9rem;
+}

@@ -2,6 +2,8 @@ import { useState } from "react";
 
 function JobItem({ job, onApply, applying }) {
   const [repoUrl, setRepoUrl] = useState("");
+    const trimmedRepoUrl = repoUrl.trim();
+    const isGithubRepoUrl = /^https:\/\/github\.com\/[\w.-]+\/[\w.-]+\/?$/i.test(trimmedRepoUrl);
 
   return (
         <article className="card mb-3 shadow-sm job-card">
@@ -16,17 +18,22 @@ function JobItem({ job, onApply, applying }) {
                     <input
                         id={`repo-${job.id}`}
                         type="url"
-                        className="form-control"
+                        className={`form-control ${trimmedRepoUrl && !isGithubRepoUrl ? "is-invalid" : ""}`}
                         placeholder="https://github.com/usuario/proyecto"
                         value={repoUrl}
                         onChange={(e) => setRepoUrl(e.target.value)}
                     />
+                    {trimmedRepoUrl && !isGithubRepoUrl && (
+                        <div className="invalid-feedback d-block">
+                            Ingresá una URL válida de GitHub (ej: https://github.com/usuario/repositorio).
+                        </div>
+                    )}
         </div>
 
         <button
                     className="btn btn-primary btn-custom w-100"
-                    onClick={() => onApply(job.id, repoUrl.trim())}
-                    disabled={applying || !repoUrl.trim()}
+                    onClick={() => onApply(job.id, trimmedRepoUrl)}
+                    disabled={applying || !isGithubRepoUrl}
         >
                     {applying ? "Enviando..." : "Postularme"}
         </button>

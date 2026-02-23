@@ -2,9 +2,11 @@ import useFetch from "./hooks/useFetch";
 import { getCandidateByEmail, getJobs, applyToJob } from "./services/api";
 import JobList from "./components/JobList";
 import "./App.css";
+import { useState } from "react";
 
 function App() {
   const EMAIL = "joaquinalfredogreco@gmail.com";
+  const [applyError, setApplyError] = useState("");
 
   const {
     data: candidate,
@@ -27,10 +29,13 @@ function App() {
     if (!candidate) return;
 
     try {
+      setApplyError("");
+
       await apply({
         uuid: candidate.uuid,
         jobId,
         candidateId: candidate.candidateId,
+        applicationId: candidate.applicationId,
         repoUrl,
       });
 
@@ -38,6 +43,7 @@ function App() {
 
     } catch (err) {
       console.error(err);
+      setApplyError(err.message || "No se pudo enviar la postulación.");
     }
   };
 
@@ -71,6 +77,12 @@ function App() {
                 Compartí tu repositorio y aplicá a las posiciones disponibles.
               </p>
             </header>
+
+            {applyError && (
+              <div className="alert alert-danger app-alert" role="alert">
+                {applyError}
+              </div>
+            )}
 
             {jobs && (
               <JobList
