@@ -1,35 +1,89 @@
-import { use, useEffect } from "react";
+import useFetch from "./hooks/useFetch";
+import { getCandidateByEmail, getJobs, applyToJob } from "./services/api";
+import JobList from "./components/JobList";
+import "./App.css";
 
 function App() {
+  const EMAIL = "joaquinalfredogreco@gmail.com";
 
-  useEffect(() =>{
-    const fetchData = async () => {
-      try {
+  const {
+    data: candidate,
+    loading: candidateLoading,
+    error: candidateError
+  } = useFetch(() => getCandidateByEmail(EMAIL));
 
-        const response = await fetch(
-        "https://botfilter-h5ddh6dye8exb7ha.centralus-01.azurewebsites.net/api/candidate/get-by-email?email=tuemail@gmail.com"
-        );
+  const {
+    data: jobs,
+    loading: jobsLoading,
+    error: jobsError
+  } = useFetch(getJobs);
 
-        if(!response.ok){
-          throw new Error("Error en la solicitud: " + response.status);
-        }
+  const {
+    execute: apply,
+    loading: applying
+  } = useFetch(applyToJob, false); // false = no ejecutar automáticamente
 
-        const data = await response.json();
-        console.log("Datos obtenidos:", data);
+  const handleApply = async (jobId, repoUrl) => {
+    if (!candidate) return;
 
-      } catch (error) {
-        console.error("Error al obtener los datos:", error);
-      }
+    try {
+      await apply({
+        uuid: candidate.uuid,
+        jobId,
+        candidateId: candidate.candidateId,
+        repoUrl,
+      });
 
-      fetchData();
-      
+      alert("¡Postulación enviada con éxito!");
+
+    } catch (err) {
+      console.error(err);
     }
-  }, [])
+  };
+
+  if (candidateLoading || jobsLoading) {
+    return (
+      <div className="app-state">
+        <div className="status-card">Cargando oportunidades...</div>
+      </div>
+    );
+  }
+
+  if (candidateError || jobsError) {
+    return (
+      <div className="app-state">
+        <div className="status-card status-card--error">
+          Ocurrió un error al cargar la información.
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div>
-      <h1>Nimble Challenge</h1>
-    </div>
+    <main className="app-shell">
+      <div className="container py-5">
+        <div className="row justify-content-center">
+          <div className="col-12 col-md-10 col-lg-8 col-xl-7">
+            <header className="app-header text-center mb-4">
+              <p className="app-kicker mb-2">Nimble Gravity</p>
+              <h1 className="main-title mb-2">Challenge de Postulaciones</h1>
+              <p className="app-subtitle mb-0">
+                Compartí tu repositorio y aplicá a las posiciones disponibles.
+              </p>
+            </header>
+
+            {jobs && (
+              <JobList
+                jobs={jobs}
+                onApply={handleApply}
+                applying={applying}
+              />
+            )}
+          </div>
+        </div>
+      </div>
+    </main>
   );
-  
 }
+
+export default App;
