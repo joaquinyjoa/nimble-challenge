@@ -18,7 +18,7 @@ export const getCandidateByEmail = async (email) => {
 // Función para obtener la lista de trabajos disponibles
 export const getJobs = async () => {
   try {
-    const response = await fetch(`${BASE_URL}/api/job/get-list`);
+    const response = await fetch(`${BASE_URL}/api/jobs/get-list`);
     if (!response.ok) {
       throw new Error(`Error en la solicitud: ${response.status}`);
     }
