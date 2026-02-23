@@ -3,59 +3,54 @@ import { getCandidateByEmail, getJobs, applyToJob } from "./services/api";
 import JobList from "./components/JobList";
 
 function App() {
-  const CORREO = "joaquinalfredogreco@gmail.com";
+  const EMAIL = "joaquinalfredogreco@gmail.com";
 
   const {
-    data: candidato,
-    loading: cargandoCandidato,
-    error: errorCandidato
-  } = useFetch(() => getCandidateByEmail(CORREO));
+    data: candidate,
+    loading: candidateLoading,
+    error: candidateError
+  } = useFetch(() => getCandidateByEmail(EMAIL));
 
   const {
-    data: trabajos,
-    loading: cargandoTrabajos,
-    error: errorTrabajos
+    data: jobs,
+    loading: jobsLoading,
+    error: jobsError
   } = useFetch(getJobs);
 
   const {
-    execute: postular,
-    loading: enviandoPostulacion
-  } = useFetch(applyToJob, false);
+    execute: apply,
+    loading: applying
+  } = useFetch(applyToJob, false); // false = no ejecutar automáticamente
 
-  const manejarPostulacion = async (jobId, repoUrl) => {
-    if (!candidato) return;
+  const handleApply = async (jobId, repoUrl) => {
+    if (!candidate) return;
 
     try {
-      await postular({
-        uuid: candidato.uuid,
+      await apply({
+        uuid: candidate.uuid,
         jobId,
-        candidateId: candidato.candidateId,
+        candidateId: candidate.candidateId,
         repoUrl,
       });
 
       alert("¡Postulación enviada con éxito!");
 
-    } catch (error) {
-      console.error(error);
+    } catch (err) {
+      console.error(err);
     }
   };
 
-  if (cargandoCandidato || cargandoTrabajos) {
-    return <p>Cargando...</p>;
-  }
-
-  if (errorCandidato || errorTrabajos) {
-    return <p>Ocurrió un error al cargar los datos.</p>;
-  }
+  if (candidateLoading || jobsLoading) return <p>Loading...</p>;
+  if (candidateError || jobsError) return <p>Error...</p>;
 
   return (
     <div>
-      <h1>Challenge Nimble Gravity</h1>
-      {trabajos && (
+      <h1>Nimble Gravity Challenge</h1>
+      {jobs && (
         <JobList
-          jobs={trabajos}
-          onApply={manejarPostulacion}
-          applying={enviandoPostulacion}
+          jobs={jobs}
+          onApply={handleApply}
+          applying={applying}
         />
       )}
     </div>
